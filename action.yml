@@ -1,0 +1,56 @@
+name: Audit Rust Dependencies
+description: |
+  Audit Rust dependencies for vulnerabilities or outdated dependencies.
+branding:
+  icon: "play"
+  color: "gray-dark"
+
+inputs:
+  TOKEN:
+    description: "The GitHub access token to allow us to retrieve, create and update issues (automatically set)"
+    required: false
+    default: ${{ github.token }}
+  denyWarnings:
+    description: "Any warnings generated will be treated as an error and fail the action"
+    required: false
+    default: "false"
+  ignore:
+    description: "A comma separated list of Rustsec IDs to ignore"
+    required: false
+    default: ""
+  createIssues:
+    description: Create/Update issues for each found vulnerability.
+    required: false
+    default: "${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' }}"
+  # TODO: Add flag for controlling issues
+  # TODO: Only open issues for main/master but not for pull requests
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/cache@v3
+      id: cache
+      with:
+        path: |
+          ${{ env.CARGO_HOME }}/.cargo/bin/cargo-audit*
+          ${{ env.CARGO_HOME }}/.cargo/.crates.toml
+          ${{ env.CARGO_HOME }}/.cargo/.crates2.json
+        key: cargo-audit-v0.17.0
+
+    - name: Install cargo-audit
+      if: steps.cache.outputs.cache-hit != 'true'
+      # Update both this version number and the cache key
+      run: cargo install cargo-audit --vers 0.17.0
+      shell: bash
+
+    - run: |
+        import audit
+        audit.run()
+      shell: python
+      env:
+        INPUT_CREATE_ISSUES: ${{ inputs.createIssues }}
+        INPUT_DENY_WARNINGS: ${{ inputs.denyWarnings }}
+        INPUT_IGNORE: ${{ inputs.ignore }}
+        INPUT_TOKEN: ${{ inputs.TOKEN }}
+        PYTHONPATH: ${{ github.action_path }}
+        REPO: ${{ github.repository }}

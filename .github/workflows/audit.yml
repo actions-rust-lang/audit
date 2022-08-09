@@ -1,0 +1,14 @@
+on: [workflow_dispatch, push]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    # permissions:
+    #   issues: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: jonasbb/test-actions@master
+        name: Audit Rust Dependencies
+        with:
+          ignore: RUSTSEC-2020-0036
+          createIssues: false
