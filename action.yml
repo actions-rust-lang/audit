@@ -1,6 +1,6 @@
 name: Audit Rust Dependencies
 description: |
-  Audit Rust dependencies for vulnerabilities or outdated dependencies.
+  Audit Rust dependencies with cargo audit for vulnerabilities or outdated dependencies.
 branding:
   icon: "shield"
   color: "red"
