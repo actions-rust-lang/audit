@@ -2,8 +2,8 @@ name: Audit Rust Dependencies
 description: |
   Audit Rust dependencies for vulnerabilities or outdated dependencies.
 branding:
-  icon: "play"
-  color: "gray-dark"
+  icon: "shield"
+  color: "red"
 
 inputs:
   TOKEN:
@@ -22,8 +22,6 @@ inputs:
     description: Create/Update issues for each found vulnerability.
     required: false
     default: "${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' }}"
-  # TODO: Add flag for controlling issues
-  # TODO: Only open issues for main/master but not for pull requests
 
 runs:
   using: composite
