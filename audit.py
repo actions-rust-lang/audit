@@ -135,11 +135,15 @@ class Entry:
         advisory = self.entry["advisory"]
 
         entry_table = self._entry_table()
+        # Replace the @ with a ZWJ to avoid triggering markdown autolinks
+        # Otherwise GitHub will interpret the @ as a mention
+        description = advisory["description"].replace("@", "@\u200d")
+
         md = f"""## {self.entry_type.icon()} {advisory['id']}: {advisory['title']}
 
 {entry_table}
 
-{advisory['description']}
+{description}
 """
         return md
 
@@ -189,7 +193,6 @@ class GitHubClient:
         list_issues_request = requests.get(
             self.issues_url, headers=self.issue_headers, params=params
         )
-        print(f"DBG: {list_issues_request.status_code=}")
         if list_issues_request.status_code == 200:
             self.existing_issues.extend(
                 [
