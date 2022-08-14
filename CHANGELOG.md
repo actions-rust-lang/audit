@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2022-08-14
+
 ### Added
 
 * Present aliases for the RustSec ID and related advisories in the overview table (#1).

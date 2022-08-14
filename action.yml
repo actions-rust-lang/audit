@@ -1,6 +1,6 @@
-name: Audit Rust Dependencies
+name: cargo audit your Rust Dependencies
 description: |
-  Audit Rust dependencies with cargo audit for vulnerabilities or outdated dependencies.
+  Audit Rust dependencies with cargo audit and the RustSec Advisory DB
 branding:
   icon: "shield"
   color: "red"
