@@ -309,8 +309,13 @@ def run() -> None:
             ignore_args.append("--ignore")
             ignore_args.append(ign)
 
+    extra_args = []
+    if os.environ["INPUT_DENY_WARNINGS"] == "true":
+        extra_args.append("--deny")
+        extra_args.append("warnings")
+
     completed = subprocess.run(
-        ["cargo", "audit", "--json"] + ignore_args,
+        ["cargo", "audit", "--json"] + extra_args + ignore_args,
         capture_output=True,
         text=True,
         check=False,

@@ -38,6 +38,9 @@ jobs:
 
 All inputs are optional.
 Consider adding a [`audit.toml` configuration file] to your repository for further configurations.
+cargo audit supports multiple warning types, such as unsound code or yanked crates.
+Configuration is only possible via the `informational_warnings` parameter in the configuration file ([#318](https://github.com/rustsec/rustsec/issues/318)).
+Setting `denyWarnings` to true will also enable these warnings, but each warning is upgraded to an error.
 
 | Name           | Description                                                                                      | Default                                                                  |
 | -------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
