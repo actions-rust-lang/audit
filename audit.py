@@ -62,26 +62,74 @@ class Entry:
     def _entry_table(self) -> str:
         advisory = self.entry["advisory"]
 
-        if self.warning_type is None:
-            warning = ""
-        else:
-            warning = f"\n| Warning            | {self.warning_type} |"
-        unaffected = " OR ".join(self.entry["versions"]["unaffected"])
-        if unaffected != "":
-            unaffected = f"\n| Unaffected Versions | `{unaffected}` |"
-        patched = " OR ".join(self.entry["versions"]["patched"])
-        if patched == "":
-            patched = "n/a"
-        else:
-            patched = f"`{patched}`"
-        table = f"""| Details            |                                      |
-| ---                | ---                                  |
-| Package            | `{advisory['package']}`              |
-| Version            | `{self.entry['package']['version']}` |{warning}
-| URL                | <{advisory['url']}>                  |
-| Patched Versions   | {patched}                            |{unaffected}
-"""
-        return table
+        table = []
+        table.append(("Details", ""))
+        table.append(("---", "---"))
+        table.append(("Package", f"`{advisory['package']}`"))
+        table.append(("Version", f"`{self.entry['package']['version']}`"))
+        if self.warning_type is not None:
+            table.append(("Warning", str(self.warning_type)))
+        table.append(("URL", advisory["url"]))
+        table.append(
+            (
+                "Patched Versions",
+                " OR ".join(self.entry["versions"]["patched"])
+                if len(self.entry["versions"]["patched"]) > 0
+                else "n/a",
+            )
+        )
+        if len(self.entry["versions"]["unaffected"]) > 0:
+            table.append(
+                (
+                    "Unaffected Versions",
+                    " OR ".join(self.entry["versions"]["unaffected"]),
+                )
+            )
+        if len(advisory["aliases"]) > 0:
+            table.append(
+                (
+                    "Aliases",
+                    ", ".join(
+                        Entry._md_autolink_advisory_id(advisory_id)
+                        for advisory_id in advisory["aliases"]
+                    ),
+                )
+            )
+        if len(advisory["related"]) > 0:
+            table.append(
+                (
+                    "Related Advisories",
+                    ", ".join(
+                        Entry._md_autolink_advisory_id(advisory_id)
+                        for advisory_id in advisory["related"]
+                    ),
+                )
+            )
+
+        table_parts = []
+        for row in table:
+            table_parts.append("| ")
+            table_parts.append(row[0])
+            table_parts.append(" | ")
+            table_parts.append(row[1])
+            table_parts.append(" |\n")
+
+        return "".join(table_parts)
+
+    @classmethod
+    def _md_autolink_advisory_id(cls, advisory_id: str) -> str:
+        """
+        If a supported advisory format, such as GHSA- is detected, return a markdown link.
+        Otherwise return the ID as text.
+        """
+
+        if advisory_id.startswith("GHSA-"):
+            return f"[{advisory_id}](https://github.com/advisories/{advisory_id})"
+        if advisory_id.startswith("CVE-"):
+            return f"[{advisory_id}](https://nvd.nist.gov/vuln/detail/{advisory_id})"
+        if advisory_id.startswith("RUSTSEC-"):
+            return f"[{advisory_id}](https://rustsec.org/advisories/{advisory_id})"
+        return advisory_id
 
     def format_as_markdown(self) -> str:
         advisory = self.entry["advisory"]
