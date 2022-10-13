@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2022-10-13
+
+### Changed
+
+* Switch from set-output to $GITHUB_OUTPUT to avoid warning
+    https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
+
 ## [1.1.0] - 2022-08-14
 
 ### Added
