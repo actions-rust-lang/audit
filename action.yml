@@ -33,12 +33,12 @@ runs:
           ${{ env.CARGO_HOME }}/.cargo/bin/cargo-audit*
           ${{ env.CARGO_HOME }}/.cargo/.crates.toml
           ${{ env.CARGO_HOME }}/.cargo/.crates2.json
-        key: cargo-audit-v0.17.0
+        key: cargo-audit-v0.17.4
 
     - name: Install cargo-audit
       if: steps.cache.outputs.cache-hit != 'true'
       # Update both this version number and the cache key
-      run: cargo install cargo-audit --vers 0.17.0
+      run: cargo install cargo-audit --vers 0.17.4 --no-default-features
       shell: bash
 
     - run: |
