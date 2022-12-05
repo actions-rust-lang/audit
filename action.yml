@@ -26,13 +26,17 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Identify cargo installation directory
+      run: echo "cargohome=${CARGO_HOME:-$HOME/.cargo}/bin" >> $GITHUB_OUTPUT
+      shell: bash
+      id: cargo-home
     - uses: actions/cache@v3
       id: cache
       with:
         path: |
-          ${{ env.CARGO_HOME }}/.cargo/bin/cargo-audit*
-          ${{ env.CARGO_HOME }}/.cargo/.crates.toml
-          ${{ env.CARGO_HOME }}/.cargo/.crates2.json
+          ${{ steps.cargo-home.outputs.cargohome }}/bin/cargo-audit*
+          ${{ steps.cargo-home.outputs.cargohome }}/.crates.toml
+          ${{ steps.cargo-home.outputs.cargohome }}/.crates2.json
         key: cargo-audit-v0.17.4
 
     - name: Install cargo-audit

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Fix the path to the cargo installation directory to fix caching.
+
 ## [1.1.2] - 2022-11-09
 
 ### Changed
