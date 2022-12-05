@@ -11,6 +11,9 @@ import requests
 # https://github.com/alstr/todo-to-issue-action/blob/25c80e9c4999d107bec208af49974d329da26370/main.py
 # Originally licensed under MIT license
 
+# Timeout in seconds for requests methods
+TIMEOUT = 30
+
 
 class Issue:
     """Basic Issue model for collecting the necessary info to send to GitHub."""
@@ -191,7 +194,7 @@ class GitHubClient:
             "state": "open",
         }
         list_issues_request = requests.get(
-            self.issues_url, headers=self.issue_headers, params=params
+            self.issues_url, headers=self.issue_headers, params=params, timeout=TIMEOUT
         )
         if list_issues_request.status_code == 200:
             self.existing_issues.extend(
@@ -226,6 +229,7 @@ class GitHubClient:
                         existing_issue["url"],
                         headers=self.issue_headers,
                         data=json.dumps(body),
+                        timeout=TIMEOUT,
                     )
                     return update_request.status_code
 
@@ -236,7 +240,9 @@ class GitHubClient:
         for assignee in issue.assignees:
             assignee_url = f"{self.repos_url}{self.repo}/assignees/{assignee}"
             assignee_request = requests.get(
-                url=assignee_url, headers=self.issue_headers
+                url=assignee_url,
+                headers=self.issue_headers,
+                timeout=TIMEOUT,
             )
             if assignee_request.status_code == 204:
                 valid_assignees.append(assignee)
@@ -248,6 +254,7 @@ class GitHubClient:
             url=self.issues_url,
             headers=self.issue_headers,
             data=json.dumps(new_issue_body),
+            timeout=TIMEOUT,
         )
 
         return new_issue_request.status_code
@@ -255,7 +262,10 @@ class GitHubClient:
     def close_issue(self, issue: Dict[str, Any]) -> int:
         body = {"state": "closed"}
         close_request = requests.patch(
-            issue["url"], headers=self.issue_headers, data=json.dumps(body)
+            issue["url"],
+            headers=self.issue_headers,
+            data=json.dumps(body),
+            timeout=TIMEOUT,
         )
         return close_request.status_code
 
