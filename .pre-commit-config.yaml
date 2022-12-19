@@ -14,7 +14,7 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
+    rev: v5.11.3
     # https://github.com/psf/black/blob/main/docs/guides/using_black_with_other_tools.md
     hooks:
       - id: isort
