@@ -15,6 +15,12 @@ import requests
 TIMEOUT = 30
 
 
+def debug(message: str) -> None:
+    """Print a debug message to the GitHub Action log"""
+    newline = "\n"
+    print(f"""::debug::{message.replace(newline, " ")}""")
+
+
 class Issue:
     """Basic Issue model for collecting the necessary info to send to GitHub."""
 
@@ -193,6 +199,7 @@ class GitHubClient:
             "page": page,
             "state": "open",
         }
+        debug(f"Fetching existing issues from GitHub: {page=}")
         list_issues_request = requests.get(
             self.issues_url, headers=self.issue_headers, params=params, timeout=TIMEOUT
         )
@@ -327,12 +334,15 @@ def run() -> None:
         extra_args.append("--deny")
         extra_args.append("warnings")
 
+    audit_cmd = ["cargo", "audit", "--json"] + extra_args + ignore_args
+    debug(f"Running command: {audit_cmd}")
     completed = subprocess.run(
-        ["cargo", "audit", "--json"] + extra_args + ignore_args,
+        audit_cmd,
         capture_output=True,
         text=True,
         check=False,
     )
+    debug(f"Command output: {completed.stdout}")
     data = json.loads(completed.stdout)
 
     summary = create_summary(data)
