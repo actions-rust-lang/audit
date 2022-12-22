@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.5] - 2022-12-22
+
+* Fix duplicate issues for yanked crates.
+
+    The previous version introduced a bug where existing issues were not properly detected.
+    This only affected issues for yanked crates.
+    Now duplicate issues will no longer be created.
+
 ## [1.1.4] - 2022-12-22
 
 * Handle warnings without any associated advisory.
