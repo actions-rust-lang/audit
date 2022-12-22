@@ -177,7 +177,7 @@ Switch to a different version of `{name}` to resolve this issue.
             # This occurs when a yanked version is detected.
 
             name = self.entry["package"]["name"]
-            return f"""## {self.id()} is yanked.
+            return f"""## {self.entry_type.icon()} {self.id()} is yanked.
 
 Switch to a different version of `{name}` to resolve this issue.
 """
