@@ -69,6 +69,13 @@ class Entry:
         self.warning_type = warning_type
 
     def id(self) -> str:
+        """
+        Return the ID of the entry.
+        """
+
+        # IMPORTANT: Coordinate this value with the `_get_existing_issues` method below.
+        # Any value returned here must also be present in the filtering there, since the id will be used in the issue title.
+
         advisory = self.entry.get("advisory", None)
         if advisory:
             return advisory["id"]
@@ -188,7 +195,7 @@ Switch to a different version of `{name}` to resolve this issue.
         if advisory:
             entry_table = self._entry_table()
 
-            title = f"{advisory['id']}: {advisory['title']}"
+            title = f"{self.id()}: {advisory['title']}"
             body = f"""{entry_table}
 
 {advisory['description']}"""
@@ -197,7 +204,7 @@ Switch to a different version of `{name}` to resolve this issue.
                 labels=labels,
                 assignees=assignees,
                 body=body,
-                rustsec_id=advisory["id"],
+                rustsec_id=self.id(),
             )
         else:
             # There is no advisory.
@@ -235,6 +242,10 @@ class GitHubClient:
         # Retrieve the existing repo issues now so we can easily check them later.
         self._get_existing_issues()
 
+        debug("Existing issues:")
+        for issue in self.existing_issues:
+            debug(f"* {issue['title']}")
+
     def _get_existing_issues(self, page: int = 1) -> None:
         """Populate the existing issues list."""
         params: Dict[str, Union[str, int]] = {
@@ -252,6 +263,7 @@ class GitHubClient:
                     issue
                     for issue in list_issues_request.json()
                     if issue["title"].startswith("RUSTSEC-")
+                    or issue["title"].startswith("Crate ")
                 ]
             )
             links = list_issues_request.links
@@ -261,6 +273,7 @@ class GitHubClient:
     def create_issue(self, issue: Issue) -> Optional[int]:
         """Create a dict containing the issue details and send it to GitHub."""
         title = issue.title
+        debug(f"Creating issue: {title=}")
 
         # Check if the current issue already exists - if so, skip it.
         # The below is a simple and imperfect check based on the issue title.
@@ -282,6 +295,10 @@ class GitHubClient:
                         timeout=TIMEOUT,
                     )
                     return update_request.status_code
+
+        debug(
+            f"""No existing issue found for "{issue.rustsec_id}". Creating new issue."""
+        )
 
         new_issue_body = {"title": title, "body": issue.body, "labels": issue.labels}
 
