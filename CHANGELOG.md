@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.4] - 2022-12-22
+
+* Handle warnings without any associated advisory.
+
+    This occurs for yanked crates, where the `advisory` field is `null` in the JSON output.
+    Now a message is shown that the crate and version is yanked.
+
 ## [1.1.3] - 2022-12-05
 
 * Fix the path to the cargo installation directory to fix caching.
