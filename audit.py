@@ -30,7 +30,7 @@ class Issue:
         labels: List[str],
         assignees: List[str],
         body: str,
-        rustsec_id: str,
+        rustsec_id: str,  # Should be the start of the title
     ) -> None:
         self.title = title
         self.labels = labels
@@ -68,62 +68,78 @@ class Entry:
         self.entry_type = entry_type
         self.warning_type = warning_type
 
+    def id(self) -> str:
+        advisory = self.entry.get("advisory", None)
+        if advisory:
+            return advisory["id"]
+        else:
+            return f"Crate {self.entry['package']['name']} {self.entry['package']['version']}"
+
     def _entry_table(self) -> str:
-        advisory = self.entry["advisory"]
+        advisory = self.entry.get("advisory", None)
 
-        table = []
-        table.append(("Details", ""))
-        table.append(("---", "---"))
-        table.append(("Package", f"`{advisory['package']}`"))
-        table.append(("Version", f"`{self.entry['package']['version']}`"))
-        if self.warning_type is not None:
-            table.append(("Warning", str(self.warning_type)))
-        table.append(("URL", advisory["url"]))
-        table.append(
-            (
-                "Patched Versions",
-                " OR ".join(self.entry["versions"]["patched"])
-                if len(self.entry["versions"]["patched"]) > 0
-                else "n/a",
-            )
-        )
-        if len(self.entry["versions"]["unaffected"]) > 0:
+        if advisory:
+            table = []
+            table.append(("Details", ""))
+            table.append(("---", "---"))
+            table.append(("Package", f"`{advisory['package']}`"))
+            table.append(("Version", f"`{self.entry['package']['version']}`"))
+            if self.warning_type is not None:
+                table.append(("Warning", str(self.warning_type)))
+            table.append(("URL", advisory["url"]))
             table.append(
                 (
-                    "Unaffected Versions",
-                    " OR ".join(self.entry["versions"]["unaffected"]),
+                    "Patched Versions",
+                    " OR ".join(self.entry["versions"]["patched"])
+                    if len(self.entry["versions"]["patched"]) > 0
+                    else "n/a",
                 )
             )
-        if len(advisory["aliases"]) > 0:
-            table.append(
-                (
-                    "Aliases",
-                    ", ".join(
-                        Entry._md_autolink_advisory_id(advisory_id)
-                        for advisory_id in advisory["aliases"]
-                    ),
+            if len(self.entry["versions"]["unaffected"]) > 0:
+                table.append(
+                    (
+                        "Unaffected Versions",
+                        " OR ".join(self.entry["versions"]["unaffected"]),
+                    )
                 )
-            )
-        if len(advisory["related"]) > 0:
-            table.append(
-                (
-                    "Related Advisories",
-                    ", ".join(
-                        Entry._md_autolink_advisory_id(advisory_id)
-                        for advisory_id in advisory["related"]
-                    ),
+            if len(advisory["aliases"]) > 0:
+                table.append(
+                    (
+                        "Aliases",
+                        ", ".join(
+                            Entry._md_autolink_advisory_id(advisory_id)
+                            for advisory_id in advisory["aliases"]
+                        ),
+                    )
                 )
-            )
+            if len(advisory["related"]) > 0:
+                table.append(
+                    (
+                        "Related Advisories",
+                        ", ".join(
+                            Entry._md_autolink_advisory_id(advisory_id)
+                            for advisory_id in advisory["related"]
+                        ),
+                    )
+                )
 
-        table_parts = []
-        for row in table:
-            table_parts.append("| ")
-            table_parts.append(row[0])
-            table_parts.append(" | ")
-            table_parts.append(row[1])
-            table_parts.append(" |\n")
+            table_parts = []
+            for row in table:
+                table_parts.append("| ")
+                table_parts.append(row[0])
+                table_parts.append(" | ")
+                table_parts.append(row[1])
+                table_parts.append(" |\n")
 
-        return "".join(table_parts)
+            return "".join(table_parts)
+        else:
+            # There is no advisory.
+            # This occurs when a yanked version is detected.
+
+            name = self.entry["package"]["name"]
+            return f"""{self.id()} is yanked.
+Switch to a different version of `{name}` to resolve this issue.
+"""
 
     @classmethod
     def _md_autolink_advisory_id(cls, advisory_id: str) -> str:
@@ -141,37 +157,64 @@ class Entry:
         return advisory_id
 
     def format_as_markdown(self) -> str:
-        advisory = self.entry["advisory"]
+        advisory = self.entry.get("advisory", None)
 
-        entry_table = self._entry_table()
-        # Replace the @ with a ZWJ to avoid triggering markdown autolinks
-        # Otherwise GitHub will interpret the @ as a mention
-        description = advisory["description"].replace("@", "@\u200d")
+        if advisory:
+            entry_table = self._entry_table()
+            # Replace the @ with a ZWJ to avoid triggering markdown autolinks
+            # Otherwise GitHub will interpret the @ as a mention
+            description = advisory["description"].replace("@", "@\u200d")
 
-        md = f"""## {self.entry_type.icon()} {advisory['id']}: {advisory['title']}
+            md = f"""## {self.entry_type.icon()} {advisory['id']}: {advisory['title']}
 
 {entry_table}
 
 {description}
 """
-        return md
+            return md
+        else:
+            # There is no advisory.
+            # This occurs when a yanked version is detected.
+
+            name = self.entry["package"]["name"]
+            return f"""## {self.id()} is yanked.
+
+Switch to a different version of `{name}` to resolve this issue.
+"""
 
     def format_as_issue(self, labels: List[str], assignees: List[str]) -> Issue:
-        advisory = self.entry["advisory"]
+        advisory = self.entry.get("advisory", None)
 
-        entry_table = self._entry_table()
+        if advisory:
+            entry_table = self._entry_table()
 
-        title = f"{advisory['id']}: {advisory['title']}"
-        body = f"""{entry_table}
+            title = f"{advisory['id']}: {advisory['title']}"
+            body = f"""{entry_table}
 
 {advisory['description']}"""
-        return Issue(
-            title=title,
-            labels=labels,
-            assignees=assignees,
-            body=body,
-            rustsec_id=advisory["id"],
-        )
+            return Issue(
+                title=title,
+                labels=labels,
+                assignees=assignees,
+                body=body,
+                rustsec_id=advisory["id"],
+            )
+        else:
+            # There is no advisory.
+            # This occurs when a yanked version is detected.
+
+            name = self.entry["package"]["name"]
+            title = f"{self.id()} is yanked"
+            body = (
+                f"""Switch to a different version of `{name}` to resolve this issue."""
+            )
+            return Issue(
+                title=title,
+                labels=labels,
+                assignees=assignees,
+                body=body,
+                rustsec_id=self.id(),
+            )
 
 
 class GitHubClient:
@@ -376,7 +419,7 @@ def run() -> None:
         num_existing_issues = len(gh_client.existing_issues)
         for entry in entries:
             for ex_issue in gh_client.existing_issues:
-                if ex_issue["title"].startswith(entry.entry["advisory"]["id"]):
+                if ex_issue["title"].startswith(entry.id()):
                     gh_client.existing_issues.remove(ex_issue)
         num_old_issues = len(gh_client.existing_issues)
         print(
