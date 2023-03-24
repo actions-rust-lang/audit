@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.6] - 2023-03-24
+
+* Update `cargo-audit` to 0.17.5
+
 ## [1.1.5] - 2022-12-22
 
 * Fix duplicate issues for yanked crates.
