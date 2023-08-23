@@ -133,9 +133,13 @@ class Entry:
             table_parts = []
             for row in table:
                 table_parts.append("| ")
-                table_parts.append(row[0])
+                if row[0] is not None:
+                    table_parts.append(row[0])
                 table_parts.append(" | ")
-                table_parts.append(row[1])
+                if row[1] is not None:
+                    table_parts.append(row[1])
+                else:
+                    table_parts.append("n/a")
                 table_parts.append(" |\n")
 
             return "".join(table_parts)
