@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.10] - 2023-11-02
+
+* Fix running the action, by using the correct version of the cache action.
+
 ## [1.1.9] - 2023-11-01
 
 * Update `cargo-audit` to 0.18.3
