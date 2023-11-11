@@ -14,6 +14,10 @@ inputs:
     description: "Any warnings generated will be treated as an error and fail the action"
     required: false
     default: "false"
+  file:
+    description: "Cargo lockfile to inspect"
+    required: false
+    default: "Cargo.lock"
   ignore:
     description: "A comma separated list of Rustsec IDs to ignore"
     required: false
@@ -52,6 +56,7 @@ runs:
       env:
         INPUT_CREATE_ISSUES: ${{ inputs.createIssues }}
         INPUT_DENY_WARNINGS: ${{ inputs.denyWarnings }}
+        INPUT_FILE: ${{ inputs.file }}
         INPUT_IGNORE: ${{ inputs.ignore }}
         INPUT_TOKEN: ${{ inputs.TOKEN }}
         PYTHONPATH: ${{ github.action_path }}
