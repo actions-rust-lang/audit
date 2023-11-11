@@ -26,12 +26,11 @@ on:
   # Run manually
   workflow_dispatch:
 
-permissions: read-all
-
 jobs:
   audit:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       issues: write
     steps:
       - uses: actions/checkout@v4
