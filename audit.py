@@ -398,6 +398,10 @@ def run() -> None:
         extra_args.append("--deny")
         extra_args.append("warnings")
 
+    if os.environ["INPUT_FILE"] != "":
+        extra_args.append("--file")
+        extra_args.append(os.environ["INPUT_FILE"])
+
     audit_cmd = ["cargo", "audit", "--json"] + extra_args + ignore_args
     debug(f"Running command: {audit_cmd}")
     completed = subprocess.run(
