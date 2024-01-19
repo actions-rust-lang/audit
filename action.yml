@@ -17,7 +17,7 @@ inputs:
   file:
     description: "Cargo lockfile to inspect"
     required: false
-    default: "Cargo.lock"
+    default: ""
   ignore:
     description: "A comma separated list of Rustsec IDs to ignore"
     required: false
