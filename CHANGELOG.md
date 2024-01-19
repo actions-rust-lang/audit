@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.12] - 2024-01-20
+
+* Fix default of `file` argument to make it work again for repositories without `Cargo.lock` checked in.
+
 ## [1.1.11] - 2024-01-18
 
 * Allow specifying the path to the `Cargo.lock` file, in case it is not in the root of the repository (#55)

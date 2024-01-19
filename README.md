@@ -53,7 +53,7 @@ Setting `denyWarnings` to true will also enable these warnings, but each warning
 | -------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
 | `TOKEN`        | The GitHub access token to allow us to retrieve, create and update issues (automatically set).   | `github.token`                                                           |
 | `denyWarnings` | Any warnings generated will be treated as an error and fail the action.                          | false                                                                    |
-| `file`         | The path to the Cargo.lock file.                                                                 | `Cargo.lock`                                                             |
+| `file`         | The path to the Cargo.lock file.                                                                 |                                                                          |
 | `ignore`       | A comma separated list of Rustsec IDs to ignore.                                                 |                                                                          |
 | `createIssues` | Create/Update issues for each found vulnerability. By default only on `main` or `master` branch. | `github.ref == 'refs/heads/master' \|\| github.ref == 'refs/heads/main'` |
 
