@@ -410,7 +410,9 @@ def run() -> None:
         text=True,
         check=False,
     )
+    debug(f"Command return code: {completed.returncode}")
     debug(f"Command output: {completed.stdout}")
+    debug(f"Command error: {completed.stderr}")
     data = json.loads(completed.stdout)
 
     summary = create_summary(data)
