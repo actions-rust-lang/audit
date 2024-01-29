@@ -97,9 +97,11 @@ class Entry:
             table.append(
                 (
                     "Patched Versions",
-                    " OR ".join(self.entry["versions"]["patched"])
-                    if len(self.entry["versions"]["patched"]) > 0
-                    else "n/a",
+                    (
+                        " OR ".join(self.entry["versions"]["patched"])
+                        if len(self.entry["versions"]["patched"]) > 0
+                        else "n/a"
+                    ),
                 )
             )
             if len(self.entry["versions"]["unaffected"]) > 0:
