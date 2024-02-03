@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.13] - 2024-02-03
+
+* Update `cargo-audit` to 0.19.0
+
 ## [1.1.12] - 2024-01-20
 
 * Fix default of `file` argument to make it work again for repositories without `Cargo.lock` checked in.
