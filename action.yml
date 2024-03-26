@@ -46,7 +46,7 @@ runs:
     - name: Install cargo-audit
       if: steps.cache.outputs.cache-hit != 'true'
       # Update both this version number and the cache key
-      run: cargo install cargo-audit --vers 0.20.0 --no-default-features
+      run: cargo install cargo-audit --vers 0.20.0 --no-default-features --locked
       shell: bash
 
     - run: |
