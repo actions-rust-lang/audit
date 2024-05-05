@@ -49,13 +49,14 @@ cargo audit supports multiple warning types, such as unsound code or yanked crat
 Configuration is only possible via the `informational_warnings` parameter in the configuration file ([#318](https://github.com/rustsec/rustsec/issues/318)).
 Setting `denyWarnings` to true will also enable these warnings, but each warning is upgraded to an error.
 
-| Name           | Description                                                                                      | Default                                                                  |
-| -------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| `TOKEN`        | The GitHub access token to allow us to retrieve, create and update issues (automatically set).   | `github.token`                                                           |
-| `denyWarnings` | Any warnings generated will be treated as an error and fail the action.                          | false                                                                    |
-| `file`         | The path to the Cargo.lock file.                                                                 |                                                                          |
-| `ignore`       | A comma separated list of Rustsec IDs to ignore.                                                 |                                                                          |
-| `createIssues` | Create/Update issues for each found vulnerability. By default only on `main` or `master` branch. | `github.ref == 'refs/heads/master' \|\| github.ref == 'refs/heads/main'` |
+| Name               | Description                                                                                      | Default                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| `TOKEN`            | The GitHub access token to allow us to retrieve, create and update issues (automatically set).   | `github.token`                                                           |
+| `denyWarnings`     | Any warnings generated will be treated as an error and fail the action.                          | false                                                                    |
+| `file`             | The path to the Cargo.lock file to inspect file.                                                 |                                                                          |
+| `ignore`           | A comma separated list of Rustsec IDs to ignore.                                                 |                                                                          |
+| `createIssues`     | Create/Update issues for each found vulnerability. By default only on `main` or `master` branch. | `github.ref == 'refs/heads/master' \|\| github.ref == 'refs/heads/main'` |
+| `workingDirectory` | Run `cargo audit` from the given working directory                                               |                                                                          |
 
 ## License
 
