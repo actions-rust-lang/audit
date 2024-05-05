@@ -404,10 +404,15 @@ def run() -> None:
         extra_args.append("--file")
         extra_args.append(os.environ["INPUT_FILE"])
 
+    working_directory = None
+    if os.environ["INPUT_WORKING_DIRECTORY"] != "":
+        working_directory = os.environ["INPUT_WORKING_DIRECTORY"]
+
     audit_cmd = ["cargo", "audit", "--json"] + extra_args + ignore_args
     debug(f"Running command: {audit_cmd}")
     completed = subprocess.run(
         audit_cmd,
+        cwd=working_directory,
         capture_output=True,
         text=True,
         check=False,

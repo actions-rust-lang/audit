@@ -15,7 +15,7 @@ inputs:
     required: false
     default: "false"
   file:
-    description: "Cargo lockfile to inspect"
+    description: "The path to the Cargo.lock file to inspect"
     required: false
     default: ""
   ignore:
@@ -26,6 +26,10 @@ inputs:
     description: Create/Update issues for each found vulnerability.
     required: false
     default: "${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' }}"
+  workingDirectory:
+    description: "Run `cargo audit` from the given working directory"
+    required: false
+    default: ""
 
 runs:
   using: composite
@@ -59,5 +63,6 @@ runs:
         INPUT_FILE: ${{ inputs.file }}
         INPUT_IGNORE: ${{ inputs.ignore }}
         INPUT_TOKEN: ${{ inputs.TOKEN }}
+        INPUT_WORKING_DIRECTORY: ${{ inputs.workingDirectory }}
         PYTHONPATH: ${{ github.action_path }}
         REPO: ${{ github.repository }}
