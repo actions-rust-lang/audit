@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2024-07-31
+
+* Temporarily remove `--locked` from the install instructions again, since cargo-audit relies on an old version of `time` that is incompatible with Rust 1.80.
+
 ## [1.2.0] - 2024-03-05
 
 * feat: add --locked to cargo install cargo-audit by @lwshang in #72
