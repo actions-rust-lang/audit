@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2024-03-05
+
+* feat: add --locked to cargo install cargo-audit by @lwshang in #72
+* Add working directory input to configure where cargo audit executes by @jonasbb in #78
+
 ## [1.1.14] - 2024-02-18
 
 * Update `cargo-audit` to 0.20.0
