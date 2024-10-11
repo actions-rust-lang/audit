@@ -58,6 +58,18 @@ Setting `denyWarnings` to true will also enable these warnings, but each warning
 | `createIssues`     | Create/Update issues for each found vulnerability. By default only on `main` or `master` branch. | `github.ref == 'refs/heads/master' \|\| github.ref == 'refs/heads/main'` |
 | `workingDirectory` | Run `cargo audit` from the given working directory                                               |                                                                          |
 
+## Dependencies
+
+The action works best on the GitHub-hosted runners, but can work on self-hosted ones too, provided the necessary dependencies are available.
+PRs to add support for more environments are welcome.
+
+* bash
+* Python 3.9+
+    * requests
+* Rust stable
+    * cargo
+* use node actions
+
 ## License
 
 The scripts and documentation in this project are released under the [MIT License].
