@@ -21,6 +21,19 @@ def debug(message: str) -> None:
     print(f"""::debug::{message.replace(newline, " ")}""")
 
 
+def error(message: str) -> None:
+    """Print an error message to the GitHub Action log"""
+    newline = "\n"
+    print(f"""::error::{message.replace(newline, " ")}""")
+
+
+def group(title: str, message: str) -> None:
+    """Print an expandable group message to the GitHub Action log"""
+    print(f"::group::{title}")
+    print(message)
+    print("::endgroup::")
+
+
 class Issue:
     """Basic Issue model for collecting the necessary info to send to GitHub."""
 
@@ -420,7 +433,18 @@ def run() -> None:
     debug(f"Command return code: {completed.returncode}")
     debug(f"Command output: {completed.stdout}")
     debug(f"Command error: {completed.stderr}")
-    data = json.loads(completed.stdout)
+    try:
+        data = json.loads(completed.stdout)
+    except json.decoder.JSONDecodeError as _:
+        error(
+            f"cargo audit did not produce any JSON output. Exit code: {completed.returncode}"
+        )
+        group(
+            "cargo audit output",
+            f"""stdout:\n{completed.stdout}\n\n\nstderr:\n{completed.stderr}""",
+        )
+
+        sys.exit(2)
 
     summary = create_summary(data)
     entries = create_entries(data)
