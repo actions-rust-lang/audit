@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.11] - 2024-01-18
 
 * Allow specifying the path to the `Cargo.lock` file, in case it is not in the root of the repository (#55)
-* Update the example in the readme, to have the correct permissions for private repositories.
+* Update the example in the README, to have the correct permissions for private repositories.
 
 ## [1.1.10] - 2023-11-02
 

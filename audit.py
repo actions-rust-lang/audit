@@ -7,24 +7,25 @@ from typing import Any, Dict, List, Optional, Union
 
 import requests
 
-# GitHub API CLient copied and adapted from
+# GitHub API Client copied and adapted from
 # https://github.com/alstr/todo-to-issue-action/blob/25c80e9c4999d107bec208af49974d329da26370/main.py
 # Originally licensed under MIT license
 
-# Timeout in seconds for requests methods
 TIMEOUT = 30
+"""Timeout in seconds for requests methods"""
+
+NEWLINE = "\n"
+"""Definition of newline"""
 
 
 def debug(message: str) -> None:
     """Print a debug message to the GitHub Action log"""
-    newline = "\n"
-    print(f"""::debug::{message.replace(newline, " ")}""")
+    print(f"""::debug::{message.replace(NEWLINE, " ")}""")
 
 
 def error(message: str) -> None:
     """Print an error message to the GitHub Action log"""
-    newline = "\n"
-    print(f"""::error::{message.replace(newline, " ")}""")
+    print(f"""::error::{message.replace(NEWLINE, " ")}""")
 
 
 def group(title: str, message: str) -> None:
