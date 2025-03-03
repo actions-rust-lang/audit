@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.4] - 2025-03-03
+
+* Update `cargo-audit` to 0.21.2
+
 ## [1.2.3] - 2024-12-17
 
 * Show a better error message when running "cargo audit" fails #98
