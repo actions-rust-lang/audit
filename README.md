@@ -20,7 +20,7 @@ on:
       - '**/Cargo.lock'
       # Run if the configuration file changes
       - '**/audit.toml'
-  # Rerun periodicly to pick up new advisories
+  # Rerun periodically to pick up new advisories
   schedule:
     - cron: '0 0 * * *'
   # Run manually
