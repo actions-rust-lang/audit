@@ -14,13 +14,13 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/PyCQA/isort
-    rev: 6.1.0
+    rev: 7.0.0
     # https://github.com/psf/black/blob/main/docs/guides/using_black_with_other_tools.md
     hooks:
       - id: isort
         args: ["--profile=black"]
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.20.0
+    rev: v3.21.0
     hooks:
       - id: pyupgrade
         args: ["--py37-plus"]
@@ -31,7 +31,7 @@ repos:
         additional_dependencies:
           - types-requests
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.34.0
+    rev: 0.34.1
     hooks:
       - id: check-dependabot
       - id: check-github-actions
