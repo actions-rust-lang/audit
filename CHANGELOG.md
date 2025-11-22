@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.6] - 2025-11-22
+
+* Update `cargo-audit` to 0.22.0
+
 ## [1.2.5] - 2025-10-09
 
 * Pin the version of `actions/cache` to commit hash by @Gronner in #122
