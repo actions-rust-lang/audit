@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.7] - 2026-01-05
+
+* Explicitly select stable as the rust version. This should take precedence over any rust-toolchain or directory overwrites.
+  Fixes #134
+
 ## [1.2.6] - 2025-11-22
 
 * Update `cargo-audit` to 0.22.0
